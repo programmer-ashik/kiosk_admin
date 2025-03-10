@@ -2,9 +2,10 @@
 
 import { assets } from "@/public/assets/assets_frontend/assets";
 import Image from "next/image";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import sliderDatas from "../../public/uploads/sliderData.json";
+import { AppContext } from "../context/AppContext";
 
 const AdminForm = () => {
     const [sliderData, setSliderData] = useState(sliderDatas);
@@ -14,7 +15,7 @@ const AdminForm = () => {
     const [numSliderImages, setNumSliderImages] = useState(sliderDatas.sliderImages?.length || 1);
     const [videoFile, setVideoFile] = useState(sliderDatas.video || null); // Store the File object
     const [error, setError] = useState('');
-
+    const { setAtoken } = useContext(AppContext)
     // Handle image change for a specific index
     const handleSliderImageChange = (index, file) => {
         const newSliderImages = [...sliderImages];
@@ -96,10 +97,11 @@ const AdminForm = () => {
         } catch (error) {
             console.error("Error uploading files:", error);
         }
+        setIsEdit(false)
     };
 
     return (
-        <div className="max-w-7xl text-sm flex flex-col gap-4 px-4 py-8">
+        <div className="max-w-7xl text-sm flex flex-col gap-4 px-4">
             <div className="header">
                 <h1 className="text-md text-gray-800 font-bold">Header Image Uploader</h1>
             </div>

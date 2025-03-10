@@ -1,10 +1,13 @@
+import AppContextProvider from "@/app/context/AppContext"
 import { ToastContainer } from "react-toastify"
 
 const LayoutContent = ({ children }) => {
     return (
         <div className="relative max-w-7xl mx-auto px-4 md:px-8">
-            {children}
-            <ToastContainer />
+            <AppContextProvider>
+                {children}
+                <ToastContainer />
+            </AppContextProvider>
         </div>
     )
 }
