@@ -1,5 +1,5 @@
 {
-  "title": "WelCome to Bangladesh Coast Guard",
+  "title": "WellCome to Bangladesh Coast Guard",
   "image": "/imageIcon.jpg",
   "headerImage": {
     "bdFlag": "/uploads/1741199261787.png",
@@ -7,12 +7,10 @@
     "cgFlag": "/uploads/1741199261790.png"
   },
   "sliderImages": [
-    "/uploads/1741195890978.jpg",
-    "/uploads/1741195890988.jpg",
-    "/uploads/1741195890992.jpg",
-    "/uploads/1741195890995.jpg",
-    "/uploads/1741195890996.png",
-    "/uploads/1741246023005.jpg"
+    "/uploads/1741841417889.png",
+    "/uploads/1741841417892.png",
+    "/uploads/1741851665751.jpg",
+    "/uploads/1742221280061.jpg"
   ],
-  "video": "/uploads/1741249398166.mp4"
+  "video": "/uploads/1742221128013.mp4"
 }

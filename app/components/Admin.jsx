@@ -1,11 +1,10 @@
-"use client"; // Add this directive at the top
-
-import { assets } from "@/public/assets/assets_frontend/assets";
-import Image from "next/image";
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
+import axiosInstance from "@/lib/axiosInstance";
 import sliderDatas from "../../public/uploads/sliderData.json";
 import { AppContext } from "../context/AppContext";
+import Image from "next/image";
+import { assets } from "@/public/assets/assets_frontend/assets";
 
 const AdminForm = () => {
     const [sliderData, setSliderData] = useState(sliderDatas);
@@ -13,35 +12,24 @@ const AdminForm = () => {
     const [headerImage, setHeaderImage] = useState(sliderDatas.headerImage);
     const [sliderImages, setSliderImages] = useState([]);
     const [numSliderImages, setNumSliderImages] = useState(sliderDatas.sliderImages?.length || 1);
-    const [videoFile, setVideoFile] = useState(sliderDatas.video || null); // Store the File object
-    const [error, setError] = useState('');
-    const { setAtoken } = useContext(AppContext)
-    // Handle image change for a specific index
+    const [videoFile, setVideoFile] = useState(sliderDatas.video || null); 
+    const { setAtoken } = useContext(AppContext);
+
     const handleSliderImageChange = (index, file) => {
         const newSliderImages = [...sliderImages];
         newSliderImages[index] = file;
         setSliderImages(newSliderImages);
     };
 
-    // Add more slider image fields
     const addMoreSliderImages = () => {
         setNumSliderImages((prev) => prev + 1);
     };
 
-    // Handle video upload
     const handleVideoChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setVideoFile(file); // Store the File object
+            setVideoFile(file); 
             toast.success('Video Uploaded');
-            // if (file.size > 20000000) { // 20MB limit (20 * 1024 * 1024)
-            //     toast.warn("File size must be under 20MB");
-            //     setVideoFile(null);
-            // } else {
-            //     setError("");
-            //     // setVideoFile(file); // Store the File object
-            //     // toast.success('Video Uploaded');
-            // }
         }
     };
 
@@ -70,34 +58,24 @@ const AdminForm = () => {
         // Append text data
         formData.append("title", sliderData.title);
 
-        // Send data to the API route
         try {
-            const response = await fetch("/api/upload", {
-                method: "POST",
-                body: formData,
+            // Send data to the API route
+            const response = await axiosInstance.post("/api/upload", formData,{
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
-
-            if (!response.ok) {
+            if (response.status === 200) {
+                toast.success("File Uploaded");
+            } else {
                 throw new Error("Failed to upload files");
             }
-
-            if (response.ok) {
-                toast.success("File Uploaded");
-            }
-
-            const result = await response.json();
-            console.log(result.message);
-
-            // Update UI with the uploaded file paths
-            if (result.files) {
-                result.files.forEach((file) => {
-                    console.log(`File saved: ${file.filePath}`);
-                });
-            }
         } catch (error) {
-            console.error("Error uploading files:", error);
+            console.error(error);
+            toast.error("Error uploading file");
         }
-        setIsEdit(false)
+
+        setIsEdit(false);
     };
 
     return (
@@ -125,7 +103,7 @@ const AdminForm = () => {
                                         src={assets.upload_icon}
                                         width={16}
                                         height={16}
-                                        alt="profilepic"
+                                        alt="upload-icon"
                                         className={`${value instanceof File && "hidden"} bg-gray-400 w-[40px] absolute bottom-12 right-12 rounded-md border-2`}
                                     />
                                 </div>
@@ -153,7 +131,7 @@ const AdminForm = () => {
                     </div>
                 ))}
             </div>
-            {/* Slider images */}
+
             <hr />
             <div className="header">
                 <h1 className="text-md text-gray-800 font-bold">Slider Image Uploader</h1>
@@ -168,13 +146,9 @@ const AdminForm = () => {
                             <h1 className="text-md text-gray-800 font-bold">Image {index + 1}:</h1>
                             {isEdit ? (
                                 <label htmlFor={`sliderImage-${index}`}>
-                                    <div className=" inline-block cursor-pointer relative ">
+                                    <div className="inline-block cursor-pointer relative">
                                         <Image
-                                            src={
-                                                sliderImages[index] instanceof File
-                                                    ? URL.createObjectURL(sliderImages[index])
-                                                    : sliderData.sliderImages[index] || sliderData.image
-                                            }
+                                            src={sliderImages[index] instanceof File ? URL.createObjectURL(sliderImages[index]) : sliderData.sliderImages[index] || sliderData.image}
                                             width={160}
                                             height={130}
                                             alt={`sliderImage-${index}`}
@@ -213,7 +187,7 @@ const AdminForm = () => {
                     ))}
                 </div>
             </div>
-            {/* Video Upload Section */}
+
             <hr />
             <div className="header">
                 <h1 className="text-md text-gray-800 font-bold">Video Uploader</h1>
@@ -259,7 +233,6 @@ const AdminForm = () => {
                 )}
             </div>
 
-            {/* Title Informations */}
             <hr className="border-none h-[1px] bg-zinc-500" />
             <div>
                 <p className="text-neutral-500 underline mt-4">CONTACT INFORMATION</p>

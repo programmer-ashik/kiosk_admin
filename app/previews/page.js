@@ -1,11 +1,12 @@
 "use client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function Slider() {
     const [sliderData, setSliderData] = useState(null);
 
     useEffect(() => {
-        fetch("/api/slider_images")
+        fetch("http//:103.107.184.80:3000/api/slider_images")
             .then((res) => res.json())
             .then((data) => {
                 if (data.success) {
@@ -20,15 +21,15 @@ export default function Slider() {
     return (
         <div>
             <h1>{sliderData.title}</h1>
-            <img src={sliderData.image} alt="Main Image" width="400" />
+            <Image src={sliderData.image} alt="Main Image" width="400" />
             <h2>Header Images</h2>
-            <img src={sliderData.headerImage.bdFlag} alt="BD Flag" width="100" />
-            <img src={sliderData.headerImage.cglogo} alt="CG Logo" width="100" />
-            <img src={sliderData.headerImage.cgFlag} alt="CG Flag" width="100" />
+            <Image src={sliderData.headerImage.bdFlag} alt="BD Flag" width={100} height={100} />
+            <Image src={sliderData.headerImage.cglogo} alt="CG Logo" width={100} height={100} />
+            <Image src={sliderData.headerImage.cgFlag} alt="CG Flag" width={100} height={100} />
 
             <h2>Slider Images</h2>
             {sliderData.sliderImages.map((img, index) => (
-                <img key={index} src={img} alt={`Slider ${index}`} width="200" />
+                <Image key={index} src={img} alt={`Slider ${index}`} width={100} height={100} />
             ))}
 
             {sliderData.video && (
